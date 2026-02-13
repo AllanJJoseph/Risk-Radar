@@ -1,84 +1,49 @@
-import { useState, useMemo } from 'react';
-import RiskRadarChart from './components/RiskRadarChart';
-import InputForm from './components/InputForm';
-import InsightsPanel from './components/InsightsPanel';
-import {
-  computeRiskScores,
-  getOverallGrade,
-  generateInsights,
-} from './lib/riskEngine';
+import { useState, useEffect } from 'react';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 import './App.css';
 
 function App() {
-  const [inputs, setInputs] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const scores = useMemo(() => {
-    if (!inputs) {
-      const defaultInput = {
-        monthlyIncome: 75000,
-        monthlyExpense: 45000,
-        emergencyFund: 150000,
-        monthlyEMI: 18000,
-        monthlySaving: 12000,
-        lifeCover: 9000000,
-        healthCover: 5,
-        retirementCorpus: 2500000,
-        age: 35,
-        equityPercent: 65,
-      };
-      return computeRiskScores(defaultInput);
+  useEffect(() => {
+    // Check for existing session
+    const authData = localStorage.getItem('riskRadarAuth');
+    if (authData) {
+      try {
+        const parsed = JSON.parse(authData);
+        if (parsed.loggedIn) {
+          setUser(parsed);
+        }
+      } catch (e) {
+        localStorage.removeItem('riskRadarAuth');
+      }
     }
-    return computeRiskScores(inputs);
-  }, [inputs]);
+    setLoading(false);
+  }, []);
 
-  const grade = useMemo(() => getOverallGrade(scores), [scores]);
-  const insights = useMemo(
-    () => generateInsights(inputs || {
-      monthlyIncome: 75000,
-      monthlyExpense: 45000,
-      emergencyFund: 150000,
-      monthlyEMI: 18000,
-      monthlySaving: 12000,
-      lifeCover: 9000000,
-      healthCover: 5,
-      retirementCorpus: 2500000,
-      age: 35,
-      equityPercent: 65,
-    }, scores),
-    [inputs, scores]
-  );
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
 
-  return (
-    <div className="app">
-      <header className="header">
-        <h1>Financial Risk Radar</h1>
-        <p className="tagline">Middle-class India · Know your risks, protect your future</p>
-        <div className="grade-badge" style={{ borderColor: grade.color }}>
-          <span className="grade-letter" style={{ color: grade.color }}>{grade.grade}</span>
-          <span className="grade-label">{grade.label}</span>
-        </div>
-      </header>
+  const handleLogout = () => {
+    localStorage.removeItem('riskRadarAuth');
+    setUser(null);
+  };
 
-      <main className="main">
-        <section className="radar-section">
-          <div className="radar-card">
-            <RiskRadarChart scores={scores} />
-          </div>
-        </section>
+  if (loading) {
+    return (
+      <div className="app-loading">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
 
-        <section className="form-section">
-          <InputForm onSubmit={setInputs} />
-        </section>
-
-        <section className="insights-section">
-          <InsightsPanel insights={insights} />
-        </section>
-      </main>
-
-      <footer className="footer">
-        <p>For educational use. Not investment or tax advice. Consider consulting a SEBI-registered adviser.</p>
-      </footer>
-    </div>
+  return user ? (
+    <Dashboard user={user} onLogout={handleLogout} />
+  ) : (
+    <Login onLogin={handleLogin} />
   );
 }
 
