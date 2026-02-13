@@ -55,13 +55,21 @@ AI-style explanations of why scores are low and how to fix them.
 
 ### Backend Setup
 
+**Important:** The backend server is required for the AI chatbot to work.
+
 ```bash
 cd server
 npm install
 cp .env.example .env
-# Edit .env with your MongoDB URI
+# Edit .env with:
+# - MONGODB_URI (optional - chatbot works without it)
+# - GROQ_API_KEY=your_groq_api_key (required for chatbot)
 npm run dev
 ```
+
+The server will start on http://localhost:3001
+
+**Note:** MongoDB is optional. The chatbot will work without MongoDB, but user data won't be saved.
 
 ### Frontend Setup
 

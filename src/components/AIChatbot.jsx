@@ -63,11 +63,21 @@ export default function AIChatbot({ user, financialData, scores, persona }) {
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       console.error('Chatbot error:', error);
+      let errorMessage = 'I apologize, but I\'m experiencing technical difficulties.';
+      
+      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
+        errorMessage = 'Unable to connect to the server. Please make sure the backend server is running on http://localhost:3001';
+      } else if (error.message?.includes('API key')) {
+        errorMessage = 'API key not configured. Please check server configuration.';
+      } else {
+        errorMessage = `Error: ${error.message || 'Please try again in a moment.'}`;
+      }
+      
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          content: 'I apologize, but I\'m experiencing technical difficulties. Please try again in a moment.',
+          content: errorMessage,
         },
       ]);
     } finally {
