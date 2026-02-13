@@ -31,6 +31,8 @@ import JourneyTracker from './features/JourneyTracker';
 import ScenarioComparison from './features/ScenarioComparison';
 import ActionImpact from './features/ActionImpact';
 import SmartInsights from './features/SmartInsights';
+import AIChatbot from './AIChatbot';
+import ReportDownload from './ReportDownload';
 
 export default function EnhancedDashboard({ user, onLogout, onNavigateToProfile }) {
   const [inputs, setInputs] = useState(null);
@@ -230,6 +232,14 @@ export default function EnhancedDashboard({ user, onLogout, onNavigateToProfile 
 
             <section className="form-section">
               <InputForm onSubmit={handleInputSubmit} />
+              <ReportDownload 
+                user={user}
+                financialData={currentData}
+                scores={scores}
+                persona={persona}
+                insights={insights}
+                warnings={warnings}
+              />
             </section>
 
             <section className="insights-section">
@@ -267,6 +277,14 @@ export default function EnhancedDashboard({ user, onLogout, onNavigateToProfile 
       <footer className="footer">
         <p>For educational use. Not investment or tax advice. Consider consulting a SEBI-registered adviser.</p>
       </footer>
+
+      {/* AI Chatbot - Always visible */}
+      <AIChatbot 
+        user={user}
+        financialData={currentData}
+        scores={scores}
+        persona={persona}
+      />
     </div>
   );
 }
