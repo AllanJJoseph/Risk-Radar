@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+import EnhancedDashboard from './components/EnhancedDashboard';
 import Profile from './components/Profile';
 import './App.css';
 
@@ -67,7 +67,7 @@ function App() {
   }
 
   return (
-    <Dashboard
+    <EnhancedDashboard
       user={user}
       onLogout={handleLogout}
       onNavigateToProfile={handleNavigateToProfile}
