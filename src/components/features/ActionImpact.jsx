@@ -1,5 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { estimateActionImpact } from '../../lib/enhancedRiskEngine';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function ActionImpact({ currentData }) {
   const [actionType, setActionType] = useState('increase_savings');
@@ -31,6 +42,69 @@ export default function ActionImpact({ currentData }) {
     const result = estimateActionImpact(currentData, action);
     setImpact(result);
   };
+
+  const barData = useMemo(() => {
+    if (!impact) return null;
+    return {
+      labels: impact.impact.map((imp) => imp.dimension),
+      datasets: [
+        {
+          label: 'Before',
+          data: impact.impact.map((imp) => imp.before),
+          backgroundColor: 'rgba(148, 163, 184, 0.8)',
+        },
+        {
+          label: 'After',
+          data: impact.impact.map((imp) => imp.after),
+          backgroundColor: 'rgba(16, 185, 129, 0.85)',
+        },
+      ],
+    };
+  }, [impact]);
+
+  const barOptions = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            color: '#e5e7eb',
+            font: { size: 11 },
+          },
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${ctx.raw.toFixed(0)}/100`,
+          },
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#9ca3af',
+            font: { size: 10 },
+          },
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: '#6b7280',
+          },
+          grid: {
+            color: 'rgba(75, 85, 99, 0.4)',
+          },
+        },
+      },
+    }),
+    []
+  );
 
   return (
     <div className="feature-card action-impact">
@@ -70,20 +144,30 @@ export default function ActionImpact({ currentData }) {
             </div>
           </div>
 
-          <div className="impact-details">
-            {impact.impact.map((imp, i) => (
-              <div key={i} className="impact-detail-item">
-                <div className="impact-dimension">{imp.dimension}</div>
-                <div className="impact-values">
-                  <span>{imp.before.toFixed(0)}</span>
-                  <span>→</span>
-                  <span className={imp.improvement > 0 ? 'positive' : ''}>{imp.after.toFixed(0)}</span>
-                  <span className={`impact-improvement ${imp.improvement > 0 ? 'positive' : ''}`}>
-                    {imp.improvement > 0 ? '+' : ''}{imp.improvement.toFixed(0)}
-                  </span>
+          <div className="impact-visuals">
+            <div className="impact-chart">
+              {barData && (
+                <div className="bar-chart-wrap">
+                  <Bar data={barData} options={barOptions} />
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
+
+            <div className="impact-details">
+              {impact.impact.map((imp, i) => (
+                <div key={i} className="impact-detail-item">
+                  <div className="impact-dimension">{imp.dimension}</div>
+                  <div className="impact-values">
+                    <span>{imp.before.toFixed(0)}</span>
+                    <span>→</span>
+                    <span className={imp.improvement > 0 ? 'positive' : ''}>{imp.after.toFixed(0)}</span>
+                    <span className={`impact-improvement ${imp.improvement > 0 ? 'positive' : ''}`}>
+                      {imp.improvement > 0 ? '+' : ''}{imp.improvement.toFixed(0)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

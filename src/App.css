@@ -1062,6 +1062,32 @@ body {
   font-weight: 700;
 }
 
+.comparison-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.comparison-doughnut {
+  padding: var(--spacing-lg);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.comparison-doughnut h3 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.1rem;
+}
+
+.doughnut-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
 .improvements-list {
   margin-top: var(--spacing-xl);
   padding-top: var(--spacing-xl);
@@ -1072,6 +1098,20 @@ body {
   margin-bottom: var(--spacing-lg);
   font-size: 1.25rem;
   font-weight: 700;
+}
+
+.improvements-layout {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: var(--spacing-xl);
+}
+
+.improvements-chart {
+  min-height: 260px;
+}
+
+.bar-chart-wrap {
+  height: 260px;
 }
 
 .improvement-item {
@@ -1171,6 +1211,17 @@ body {
   color: var(--accent);
   font-weight: 700;
   font-size: 1.25rem;
+}
+
+.impact-visuals {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+}
+
+.impact-chart {
+  min-height: 260px;
 }
 
 .impact-details {
@@ -1934,6 +1985,14 @@ body {
   }
   
   .comparison-radars {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-top {
+    grid-template-columns: 1fr;
+  }
+
+  .improvements-layout {
     grid-template-columns: 1fr;
   }
   
