@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import Profile from './components/Profile';
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState('dashboard'); // 'dashboard' or 'profile'
 
   useEffect(() => {
     // Check for existing session
@@ -25,11 +27,21 @@ function App() {
 
   const handleLogin = (userData) => {
     setUser(userData);
+    setCurrentPage('dashboard');
   };
 
   const handleLogout = () => {
     localStorage.removeItem('riskRadarAuth');
     setUser(null);
+    setCurrentPage('dashboard');
+  };
+
+  const handleNavigateToProfile = () => {
+    setCurrentPage('profile');
+  };
+
+  const handleNavigateToDashboard = () => {
+    setCurrentPage('dashboard');
   };
 
   if (loading) {
@@ -40,10 +52,26 @@ function App() {
     );
   }
 
-  return user ? (
-    <Dashboard user={user} onLogout={handleLogout} />
-  ) : (
-    <Login onLogin={handleLogin} />
+  if (!user) {
+    return <Login onLogin={handleLogin} />;
+  }
+
+  if (currentPage === 'profile') {
+    return (
+      <Profile
+        user={user}
+        onLogout={handleLogout}
+        onBack={handleNavigateToDashboard}
+      />
+    );
+  }
+
+  return (
+    <Dashboard
+      user={user}
+      onLogout={handleLogout}
+      onNavigateToProfile={handleNavigateToProfile}
+    />
   );
 }
 

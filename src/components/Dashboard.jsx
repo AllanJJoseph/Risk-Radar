@@ -8,7 +8,7 @@ import {
   generateInsights,
 } from '../lib/riskEngine';
 
-export default function Dashboard({ user, onLogout }) {
+export default function Dashboard({ user, onLogout, onNavigateToProfile }) {
   const [inputs, setInputs] = useState(null);
 
   const scores = useMemo(() => {
@@ -56,6 +56,9 @@ export default function Dashboard({ user, onLogout }) {
             <p className="tagline">Middle-class India · Know your risks, protect your future</p>
           </div>
           <div className="user-menu">
+            <button onClick={onNavigateToProfile} className="btn-profile">
+              Profile
+            </button>
             <span className="user-name">{user?.name || user?.email}</span>
             <button onClick={onLogout} className="btn-logout">Logout</button>
           </div>
