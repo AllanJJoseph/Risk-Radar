@@ -4,6 +4,12 @@ A comprehensive AI-powered financial risk assessment tool with predictive analyt
 
 ## Features
 
+### 🤖 AI Chatbot
+Ask questions about your finances and get personalized AI-powered advice using Groq AI.
+
+### 📄 Report Download & Print
+Download comprehensive PDF/HTML reports of your financial analysis with all details for printing.
+
 ### 🔮 1. Future Risk Forecast (Predictive Mode)
 Simulates financial health 6-12 months ahead based on spending trends, savings growth, and EMI burden.
 
@@ -62,9 +68,16 @@ npm run dev
 ```bash
 npm install
 cp .env.example .env
-# Edit .env with API URL (default: http://localhost:3001/api)
+# Edit .env with:
+# - VITE_API_URL=http://localhost:3001/api (backend API URL)
+# - VITE_GROQ_API_KEY=your_groq_api_key (get from https://console.groq.com)
 npm run dev
 ```
+
+**Note:** To use the AI chatbot feature, you need a Groq API key:
+1. Sign up at https://console.groq.com
+2. Create an API key
+3. Add it to your `.env` file as `VITE_GROQ_API_KEY`
 
 ### MongoDB Setup
 
