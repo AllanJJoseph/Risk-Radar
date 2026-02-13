@@ -1,4 +1,4 @@
-# Financial Risk Radar · Middle-class India
+# Risk-Radar · Financial Risk Radar for Middle-class India
 
 A web app that visualizes and scores key financial risks for middle-class Indian households. Enter your numbers to see a radar chart and AI-style insights.
 
@@ -16,7 +16,8 @@ Scoring uses norms aligned to RBI household data and common Indian financial adv
 ## Run locally
 
 ```bash
-cd financial-risk-radar
+git clone https://github.com/AllanJJoseph/Risk-Radar.git
+cd Risk-Radar
 npm install
 npm run dev
 ```
