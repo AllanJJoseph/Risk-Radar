@@ -7,13 +7,23 @@ export default function ReportDownload({ user, financialData, scores, persona, i
   const grade = getOverallGrade(scores);
 
   const handleDownloadPDF = () => {
-    const printWindow = window.open('', '_blank');
     const reportHTML = generateReportHTML();
+    const printWindow = window.open('', '_blank');
+    
+    if (!printWindow) {
+      alert('Please allow popups to download the PDF report');
+      return;
+    }
+
+    printWindow.document.open();
     printWindow.document.write(reportHTML);
     printWindow.document.close();
-    printWindow.onload = () => {
+    
+    // Wait for content to load before printing
+    setTimeout(() => {
+      printWindow.focus();
       printWindow.print();
-    };
+    }, 500);
   };
 
   const handleDownloadHTML = () => {

@@ -28,16 +28,21 @@ app.get('/api/health', (req, res) => {
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/risk-radar';
 
-mongoose.connect(MONGODB_URI)
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+// Start server even if MongoDB is not available (for demo purposes)
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📡 API endpoints available at http://localhost:${PORT}/api`);
+  
+  // Try to connect to MongoDB (optional)
+  mongoose.connect(MONGODB_URI)
+    .then(() => {
+      console.log('✅ Connected to MongoDB');
+    })
+    .catch((error) => {
+      console.warn('⚠️  MongoDB not connected:', error.message);
+      console.log('💡 Tip: MongoDB is optional. Chatbot will work without it.');
+      console.log('💡 To enable MongoDB: Install MongoDB or set MONGODB_URI in .env');
     });
-  })
-  .catch((error) => {
-    console.error('❌ MongoDB connection error:', error);
-    console.log('💡 Tip: Make sure MongoDB is running or set MONGODB_URI in .env');
-  });
+});
 
 export default app;
